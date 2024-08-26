@@ -1,0 +1,48 @@
+{
+        "namespace": "datagen.example",
+        "name": "purchase",
+        "type": "record",
+        "fields": [
+                {"name": "id", "type": {
+                    "type": "long",
+                    "arg.properties": {
+                        "iteration": {
+                            "start": 0
+                        }
+                    }
+                }},
+                {"name": "product_id", "type": {
+                    "type": "string",
+                       "arg.properties": {
+                        "min":1,
+                        "max":100
+                     }
+                }},
+                {"name":"quantity",
+                  "type":{
+                     "type":"long",
+                     "arg.properties":{
+                        "range":{
+                           "min":1,
+                           "max":10
+                        }
+                     }
+                 }},
+                 {"name": "customer_id", "type": {
+                  "type": "string",
+                     "arg.properties": {
+                      "min":1,
+                      "max":100
+                   }
+              }},
+              {"name": "discount", "type": {
+                "type": "double",
+                 "arg.properties": {
+                    "range":{
+                       "min":0,
+                       "max":50
+                    }
+                 }
+              }}
+        ]
+}
