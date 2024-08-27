@@ -60,4 +60,30 @@ services:
       DYNAMIC_CONFIG_ENABLED: 'true'
       KAFKA_CLUSTERS_0_NAME: kafkacluster
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: 'broker:29092,localhost:29092,localhost:9092,broker:9092'
+  
+  app:
+    build: 
+      context: .
+      dockerfile: ./docker/Dockerfile.db
+    volumes:
+      - ./:/app
+    environment:
+      - POSTGRES_DB=plf_training
+      - POSTGRES_USER=platformatory
+      - POSTGRES_PASSWORD=plf_password
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14
+    ports:
+      - 5432:5432
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB=plf_training
+      - POSTGRES_USER=platformatory
+      - POSTGRES_PASSWORD=plf_password
 

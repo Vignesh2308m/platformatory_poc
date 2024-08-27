@@ -4,23 +4,24 @@ from confluent_kafka import Producer
 import socket
 import random as rd
 import json
+import os
 import avro.io
 import avro.schema
 from fastavro.utils import generate_many
 
 
 def init_cloud():
-    conf = {'bootstrap.servers': 'pkc-abcd85.us-west-2.aws.confluent.cloud:9092',
+    conf = {'bootstrap.servers': os.getenv("BOOTSRAPSERVER"),
         'security.protocol': 'SASL_SSL',
         'sasl.mechanism': 'PLAIN',
-        'sasl.username': '<CLUSTER_API_KEY>',
-        'sasl.password': '<CLUSTER_API_SECRET>',
+        'sasl.username': os.getenv("USERNAME"),
+        'sasl.password': os.getenv("PASSWORD"),
         'client.id': socket.gethostname()}
 
     return Producer(conf)
 
-def init():
-    conf = {'bootstrap.servers': 'localhost:9092',
+def init_local():
+    conf = {'bootstrap.servers': os.getenv("BOOTSTRAPSERVER"),
             'client.id': socket.gethostname()}
 
     return Producer(conf)
@@ -39,22 +40,29 @@ def ack(err,msg):
         print(f" Message sent!\n{str(msg)}")
 
 def main():
-    topic="my_topic"
-    with open("/home/vickynila/Projects/platformatory_poc/app/source/purchase_producer/purchase_schema.json") as f:
+    env=os.getenv("ENV")
+
+    if env=="cloud":
+        producer=init_cloud()
+    elif env=="local":
+        producer=init_local()
+    else:
+        print("Not a valid enviroment")
+        return None
+
+    topic=os.getenv("TOPIC")
+
+    with open("purchase_schema.json") as f:
         schema=json.load(f)
 
-    producer=init()
-
     avro_schema=avro.schema.parse(str(schema).replace("'","\""))
-    
+
     for i in generate_many(schema,1000):
         x=serialize_avro(i,avro_schema)
 
         producer.produce(topic,key="",value=x,callback=ack)
 
         producer.poll(1)
-    
-
 
 if __name__=="__main__":
     main()
