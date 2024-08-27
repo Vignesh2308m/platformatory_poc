@@ -42,8 +42,8 @@ services:
       kafka-topics --bootstrap-server broker:29092 --list
 
       echo -e 'Creating kafka topics'
-      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --topic my-topic-1 --replication-factor 1 --partitions 1
-      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --topic my-topic-2 --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --topic purchase-topic --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --topic top-product-topic --replication-factor 1 --partitions 1
 
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server broker:29092 --list
@@ -86,4 +86,17 @@ services:
       - POSTGRES_DB=plf_training
       - POSTGRES_USER=platformatory
       - POSTGRES_PASSWORD=plf_password
+
+  publisher:
+    build: 
+      context: .
+      dockerfile: ./docker/Dockerfile.pub
+    environment:
+      - ENV=local
+      - BOOTSTRAPSERVER=broker:29092
+      - TOPIC=purchase-topic
+    depends_on:
+      - zookeeper
+      - broker
+      - kafka-ui
 

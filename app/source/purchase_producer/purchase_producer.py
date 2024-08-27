@@ -11,7 +11,7 @@ from fastavro.utils import generate_many
 
 
 def init_cloud():
-    conf = {'bootstrap.servers': os.getenv("BOOTSRAPSERVER"),
+    conf = {'bootstrap.servers': os.getenv("BOOTSTRAPSERVER"),
         'security.protocol': 'SASL_SSL',
         'sasl.mechanism': 'PLAIN',
         'sasl.username': os.getenv("USERNAME"),
