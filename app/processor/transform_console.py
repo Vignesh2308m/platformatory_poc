@@ -62,9 +62,9 @@ purchase_df=avro_df.join(
 
 windowed_df = purchase_df \
             .withWatermark(
-                "event_timestamp", "10 seconds"
+                "event_timestamp", "1 hours"
             ).groupBy(
-                window(col("event_timestamp"), "10 seconds", "2 seconds"),
+                window(col("event_timestamp"), "1 hours", "5 minutes"),
                 col("name"),col("category")
             ).agg(
                 _sum(col("total_price")).alias("total_1hr")
