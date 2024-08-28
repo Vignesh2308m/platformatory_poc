@@ -1,0 +1,16 @@
+# Dockerfile
+FROM bitnami/spark:3.5
+
+WORKDIR /app
+
+COPY ../app/processor/requirements.txt .
+
+RUN pip3 install -r ./requirements.txt
+
+# Add the PostgreSQL JDBC driver
+ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.20/postgresql-42.2.20.jar /opt/bitnami/spark/jars/postgresql-42.2.20.jar
+
+ADD https://repo1.maven.org/maven2/org/apache/spark/spark-avro_2.12/3.5.0/spark-avro_2.12-3.5.0.jar  /opt/bitnami/spark/jars/spark-avro_2.12-3.5.0.jar
+
+ADD https://repo1.maven.org/maven2/org/apache/spark/spark-sql-kafka-0-10_2.12/3.5.0/spark-sql-kafka-0-10_2.12-3.5.0.jar /opt/bitnami/spark/jars/spark-sql-kafka-0-10_2.12-3.5.0.jar
+

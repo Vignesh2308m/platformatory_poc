@@ -8,7 +8,7 @@ import os
 import avro.io
 import avro.schema
 from fastavro.utils import generate_many
-
+from datetime import datetime
 
 def init_cloud():
     conf = {'bootstrap.servers': os.getenv("BOOTSTRAPSERVER"),
@@ -56,13 +56,23 @@ def main():
         schema=json.load(f)
 
     avro_schema=avro.schema.parse(str(schema).replace("'","\""))
+    
+    while True:
+        for i in generate_many(schema,1000):
+            x=serialize_avro(i,avro_schema)
 
-    for i in generate_many(schema,1000):
-        x=serialize_avro(i,avro_schema)
+            # Create a timestamp
+            timestamp_ntz = datetime.now()
 
-        producer.produce(topic,key="",value=x,callback=ack)
+            # Cast the timestamp to a string
+            timestamp_str = timestamp_ntz.strftime("%Y-%m-%d %H:%M:%S")
 
-        producer.poll(1)
+            # Encode the string as bytes for Kafka
+            kafka_key = timestamp_str.encode('utf-8')
+
+            producer.produce(topic,key=kafka_key,value=x,callback=ack)
+
+            producer.poll(1)
 
 if __name__=="__main__":
     main()

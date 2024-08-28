@@ -13,6 +13,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
+
   broker:
     image: confluentinc/cp-kafka:7.7.0
     hostname: broker
@@ -31,6 +32,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_TOOLS_LOG4J_LOGLEVEL: ERROR
+
   init-kafka:
     image: confluentinc/cp-kafka:7.7.0
     depends_on:
@@ -48,25 +50,26 @@ services:
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server broker:29092 --list
       "
+
   kafka-ui:
     image: provectuslabs/kafka-ui
     hostname: kafka-ui
     container_name: kafka_ui
     depends_on:
-    - broker
+      - broker
     ports:
-    - "8080:8080"
+      - "8080:8080"
     environment:
       DYNAMIC_CONFIG_ENABLED: 'true'
       KAFKA_CLUSTERS_0_NAME: kafkacluster
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: 'broker:29092,localhost:29092,localhost:9092,broker:9092'
   
   app:
-    build: 
+    build:
       context: .
       dockerfile: ./docker/Dockerfile.db
     volumes:
-      - ./:/app
+      - ./app/source/postgresdb/:/app
     environment:
       - POSTGRES_DB=plf_training
       - POSTGRES_USER=platformatory
@@ -100,3 +103,35 @@ services:
       - broker
       - kafka-ui
 
+  spark:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.spark
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_USER=spark
+    ports:
+      - '8090:8080'
+    volumes:
+      - ./app/processor/transform.py:/app/transform.py
+    depends_on:
+      - postgres
+
+  spark-worker:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.spark
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_USER=spark

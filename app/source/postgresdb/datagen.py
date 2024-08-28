@@ -1,8 +1,8 @@
 import psycopg2
 from faker import Faker
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 import os
-
+import time
 # Function to generate fake product details
 def generate_fake_product():
     fake = Faker()
@@ -23,7 +23,7 @@ def insert_fake_products(conn, cursor, num_products=100):
         """
         cursor.execute(query, (created, modified, name, category, price))
         conn.commit()
-
+time.sleep(10)
 # Connect to PostgreSQL database
 db_params = {
     "database": os.environ.get("POSTGRES_DB"),
@@ -39,7 +39,7 @@ cursor = conn.cursor()
 
 # Call the function to insert fake products
 insert_fake_products(conn, cursor, num_products=100)
-
+print("Data inserted")
 # Close the cursor and connection
 cursor.close()
 conn.close()
