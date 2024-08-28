@@ -35,18 +35,18 @@ To run spark job to see console output,
 ## Results
 ### Messages in both input and output topics,
 
-![alt text]('https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/kafka-topic-both.png')
+![alt text](https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/kafka-topic-both.png?raw=True)
 
 ### Messages in purchase-topic(source) in Avro format,
 
-![alt text]('https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/kafka-topic-in.png')
+![alt text](https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/kafka-topic-in.png?raw=True)
 
 ### Messages in top-product-topic(sink) in Avro format,
 
-![alt text]('https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/kafka-topic-out.png')
+![alt text](https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/kafka-topic-out.png?raw=True)
 
 ### Product dim table in console mode(spark),
-![alt text]('https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/product_tbl.png')
+![alt text](https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/product_tbl.png?raw=True)
 
 ### Total purchase per product in every 5 mins for last 1 hour console mode(spark),
-![alt text]('https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/out.png')
+![alt text](https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/out.png?raw=True)
