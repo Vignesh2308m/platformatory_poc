@@ -13,7 +13,7 @@ Data pipeline to stream and data from Apache Kafka and Postgresdb, process it us
 
 ## Pipeline Architecture
 
-![alt text]('https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/pipeline.png')
+![alt text](https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/pipeline.png?raw=True)
 
 ## Commands
 
