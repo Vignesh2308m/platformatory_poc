@@ -13,32 +13,35 @@ Data pipeline to stream and data from Apache Kafka and Postgresdb, process it us
 
 ## Pipeline Architecture
 
-[!alt text]['https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/pipeline.png?raw=True']
+![alt text]('https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/pipeline.png?raw=True')
 
 ## Commands
 
 To run docker compose file,
+
     `docker compose up --scale spark-worker=2` or
     `docker-compose up --scale spark-worker=2`
 
 To run spark job to write into kafka,
+
     `docker compose exec spark python3 transform.py` or
     `docker-compose exec spark python3 transform.py` 
 
 To run spark job to see console output,
+
     `docker compose exec spark python3 transform_console.py` or
     `docker compose exec spark python3 transform_console.py` 
 
 ## Results
 ### Messages in both input and output topics,
-[!alt text]['https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/kafka-topic-both.png']
+![alt text]('https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/kafka-topic-both.png')
 ### Messages in purchase-topic(source) in Avro format,
-[!alt text]['https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/kafka-topic-in.png?raw=True']
+![alt text]('https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/kafka-topic-in.png?raw=True')
 ### Messages in top-product-topic(sink) in Avro format,
-[!alt text]['https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/kafka-topic-out.png?raw=True']
+![alt text]('https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/kafka-topic-out.png?raw=True')
 
 ### Product dim table in console mode(spark),
-[!alt text]['https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/product_tbl.png?raw=True']
+![alt text]('https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/product_tbl.png?raw=True')
 
 ### Total purchase per product in every 5 mins for last 1 hour console mode(spark),
-[!alt text]['https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/out.png?raw=True']
+![alt text]('https://github.com/Vignesh2308m/platformatory_poc/blob/main/imgs/out.png?raw=True')
