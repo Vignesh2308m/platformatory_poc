@@ -10,6 +10,7 @@ import avro.schema
 from fastavro.utils import generate_many
 from datetime import datetime
 
+#Initialize Kafka
 def init_cloud():
     conf = {'bootstrap.servers': os.getenv("BOOTSTRAPSERVER"),
         'security.protocol': 'SASL_SSL',
@@ -61,14 +62,9 @@ def main():
         for i in generate_many(schema,1000):
             x=serialize_avro(i,avro_schema)
 
-            # Create a timestamp
-            timestamp_ntz = datetime.now()
-
-            # Cast the timestamp to a string
-            timestamp_str = timestamp_ntz.strftime("%Y-%m-%d %H:%M:%S")
-
-            # Encode the string as bytes for Kafka
-            kafka_key = timestamp_str.encode('utf-8')
+            kafka_key = datetime.now()\
+                                .strftime("%Y-%m-%d %H:%M:%S")\
+                                .encode('utf-8')
 
             producer.produce(topic,key=kafka_key,value=x,callback=ack)
 

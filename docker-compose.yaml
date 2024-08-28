@@ -77,7 +77,9 @@ services:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+
 
   postgres:
     image: postgres:14
@@ -89,6 +91,11 @@ services:
       - POSTGRES_DB=plf_training
       - POSTGRES_USER=platformatory
       - POSTGRES_PASSWORD=plf_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U platformatory -d plf_training"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
 
   publisher:
     build: 
@@ -101,7 +108,6 @@ services:
     depends_on:
       - zookeeper
       - broker
-      - kafka-ui
 
   spark:
     build:
@@ -117,9 +123,10 @@ services:
     ports:
       - '8090:8080'
     volumes:
-      - ./app/processor/transform.py:/app/transform.py
+      - ./app/processor:/app
     depends_on:
       - postgres
+      - broker
 
   spark-worker:
     build:

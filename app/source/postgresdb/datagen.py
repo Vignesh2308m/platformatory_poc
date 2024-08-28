@@ -23,7 +23,7 @@ def insert_fake_products(conn, cursor, num_products=100):
         """
         cursor.execute(query, (created, modified, name, category, price))
         conn.commit()
-time.sleep(10)
+time.sleep(20)
 # Connect to PostgreSQL database
 db_params = {
     "database": os.environ.get("POSTGRES_DB"),
